@@ -365,16 +365,17 @@ int findBreak(int& breakPos, QString text, QFontMetrics* fm, int maxWidth)
     // binary search for best break position in [bottomPos,breakPos].
     // We want the result of the binary search to be a bit too large
     int bottomPos = 0;
-    while(1) {
+    while (bottomPos < breakPos) {
         int halfPos = (bottomPos + breakPos)/2;
         int halfWidth = fm->horizontalAdvance(text, halfPos);
-        if (halfWidth < maxWidth) {
+        if (halfWidth < maxWidth)
+        {
             bottomPos = halfPos+1;
-            continue;
         }
-        breakPos = halfPos;
-        usedWidth = halfWidth;
-        if (breakPos - bottomPos <3) break;
+        else {
+            breakPos = halfPos;
+            usedWidth = halfWidth;
+        }
     }
 
     // final position by taking break boundaries into account.
