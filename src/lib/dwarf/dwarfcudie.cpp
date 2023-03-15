@@ -57,10 +57,16 @@ const char* DwarfCuDie::sourceFileForIndex(int sourceIndex) const
 
 void DwarfCuDie::loadLines() const
 {
+    Dwarf_Unsigned dw_version_out;
+    Dwarf_Small dw_table_count;
+    Dwarf_Line_Context dw_linecontext;
+
     if (m_lines)
         return;
 
-    dwarf_srclines(m_die, &m_lines, &m_lineCount, nullptr);
+    dwarf_srclines_b(m_die, &dw_version_out, &dw_table_count, &dw_linecontext, nullptr),
+    dwarf_srclines_from_linecontext(dw_linecontext, &m_lines, &m_lineCount, nullptr);
+    dwarf_srclines_dealloc_b(dw_linecontext);
 }
 
 DwarfLine DwarfCuDie::lineForAddress(Dwarf_Addr addr) const
